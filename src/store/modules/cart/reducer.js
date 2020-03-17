@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 const INITIAL_STATE = {
   products: [],
   cartSize: 0,
@@ -6,10 +8,20 @@ const INITIAL_STATE = {
 export default function cart(state = INITIAL_STATE, action) {
   switch (action.type) {
     case 'ADD_TO_CART':
-      const cartSize = state.products.length + 1;
-      const product = { ...action.product, amount: 1 };
+      return produce(state, draft => {
+        const productIndex = draft.products.findIndex(
+          product => product.id === action.product.id
+        );
 
-      return { products: [...state.products, product], cartSize };
+        if (productIndex >= 0) {
+          draft.products[productIndex].amount += 1;
+        } else {
+          action.product.amount = 1;
+          draft.products.push(action.product);
+        }
+
+        draft.cartSize += 1;
+      });
 
     default:
       return state;
