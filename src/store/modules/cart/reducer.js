@@ -23,6 +23,17 @@ export default function cart(state = INITIAL_STATE, action) {
         draft.cartSize += 1;
       });
 
+    case 'REMOVE_FROM_CART':
+      return produce(state, draft => {
+        const productIndex = state.products.findIndex(
+          product => product.id === action.id
+        );
+
+        if (productIndex >= 0) {
+          draft.products.splice(productIndex, 1);
+        }
+      });
+
     default:
       return state;
   }
