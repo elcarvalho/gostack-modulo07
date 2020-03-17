@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import api from '../../services/api';
 
@@ -10,6 +11,7 @@ import { ProductList } from './styles';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getProducts = async () => {
@@ -26,6 +28,13 @@ export default function Home() {
     getProducts();
   }, []);
 
+  const handleAddProduct = product => {
+    dispatch({
+      type: 'ADD_TO_CART',
+      product,
+    });
+  };
+
   return (
     <ProductList>
       {products.map(product => (
@@ -34,7 +43,7 @@ export default function Home() {
           <strong>{product.title}</strong>
           <span>{product.priceFormatted}</span>
 
-          <button type="button">
+          <button type="button" onClick={() => handleAddProduct(product)}>
             <div>
               <MdAddShoppingCart size={16} color="#fff" /> 3
             </div>
