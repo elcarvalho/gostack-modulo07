@@ -16,6 +16,14 @@ export default function Cart() {
 
   const dispatch = useDispatch();
 
+  const handleIncrement = product => {
+    dispatch(CartActions.updateAmount(product.id, product.amount + 1));
+  };
+
+  const handleDecrement = product => {
+    dispatch(CartActions.updateAmount(product.id, product.amount - 1));
+  };
+
   return (
     <Container>
       <ProductTable>
@@ -40,11 +48,17 @@ export default function Cart() {
               </td>
               <td>
                 <div>
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => handleDecrement(product)}
+                  >
                     <MdRemoveCircleOutline size={20} color="#7159c1" />
                   </button>
                   <input type="number" readOnly value={product.amount} />
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => handleIncrement(product)}
+                  >
                     <MdAddCircleOutline size={20} color="#7150c1" />
                   </button>
                 </div>
