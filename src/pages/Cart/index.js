@@ -9,6 +9,8 @@ import {
 
 import { Container, ProductTable, Total } from './styles';
 
+import * as CartActions from '../../store/modules/cart/actions';
+
 export default function Cart() {
   const products = useSelector(state => state.cart.products);
 
@@ -54,7 +56,7 @@ export default function Cart() {
                 <button
                   type="button"
                   onClick={() =>
-                    dispatch({ type: 'REMOVE_FROM_CART', id: product.id })
+                    dispatch(CartActions.removeFromCart(product.id))
                   }
                 >
                   <MdDelete size={20} color="#7159c1" />

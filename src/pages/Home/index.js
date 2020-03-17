@@ -9,6 +9,8 @@ import { MdAddShoppingCart } from 'react-icons/md';
 
 import { ProductList } from './styles';
 
+import * as CartActions from '../../store/modules/cart/actions';
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
@@ -29,10 +31,7 @@ export default function Home() {
   }, []);
 
   const handleAddProduct = product => {
-    dispatch({
-      type: 'ADD_TO_CART',
-      product,
-    });
+    dispatch(CartActions.addToCart(product));
   };
 
   return (
