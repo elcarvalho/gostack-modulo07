@@ -2,6 +2,7 @@ import { call, put, all, takeLatest, select } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 
 import api from '../../../services/api';
+import history from '../../../services/history';
 import { formatPrice } from '../../../util/format';
 
 import { addToCartSuccess, updateAmountSuccess } from './actions';
@@ -34,11 +35,11 @@ function* addToCart({ id }) {
       priceFormatted: formatPrice(response.data.price),
     };
     yield put(addToCartSuccess(data));
+    history.push('/cart');
   }
 }
 
 function* updateAmount({ id, amount }) {
-  console.tron.warn(id);
   if (amount <= 0) return;
 
   const stock = yield call(api.get, `/stock/${id}`);
