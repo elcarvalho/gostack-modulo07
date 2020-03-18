@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
@@ -9,12 +9,12 @@ import { Container, Cart } from './styles';
 import Logo from '../../assets/images/logo.svg';
 
 export default function Header() {
-  const [cartSize, setCartSize] = useState(0);
   const products = useSelector(state => state.cart.products);
 
-  useEffect(() => {
-    setCartSize(products.reduce((total, product) => total + product.amount, 0));
-  }, [products]);
+  const cartSize = useMemo(
+    () => products.reduce((total, product) => total + product.amount, 0),
+    [products]
+  );
 
   return (
     <Container>

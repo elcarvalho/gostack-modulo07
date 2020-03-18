@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { formatPrice } from '../../util/format';
@@ -14,12 +14,9 @@ import { Container, ProductTable, Total } from './styles';
 import * as CartActions from '../../store/modules/cart/actions';
 
 export default function Cart() {
-  const [productList, setProductList] = useState([]);
-  const [total, setTotal] = useState('R$ 0,00');
-
   const products = useSelector(state => state.cart.products);
 
-  const cartTotal = useMemo(
+  const total = useMemo(
     () =>
       formatPrice(
         products.reduce(
@@ -30,7 +27,7 @@ export default function Cart() {
     [products]
   );
 
-  const productsFormatted = useMemo(
+  const productList = useMemo(
     () =>
       products.map(product => ({
         ...product,
@@ -38,11 +35,6 @@ export default function Cart() {
       })),
     [products]
   );
-
-  useEffect(() => {
-    setTotal(cartTotal);
-    setProductList(productsFormatted);
-  }, [cartTotal, productsFormatted]);
 
   const dispatch = useDispatch();
 
