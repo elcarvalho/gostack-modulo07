@@ -39,11 +39,11 @@ export default function Cart() {
   const dispatch = useDispatch();
 
   const handleIncrement = product => {
-    dispatch(CartActions.updateAmount(product.id, product.amount + 1));
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount + 1));
   };
 
   const handleDecrement = product => {
-    dispatch(CartActions.updateAmount(product.id, product.amount - 1));
+    dispatch(CartActions.updateAmountRequest(product.id, product.amount - 1));
   };
 
   return (
