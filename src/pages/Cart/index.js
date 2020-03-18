@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { formatPrice } from '../../util/format';
 
 import {
   MdRemoveCircleOutline,
@@ -12,7 +14,35 @@ import { Container, ProductTable, Total } from './styles';
 import * as CartActions from '../../store/modules/cart/actions';
 
 export default function Cart() {
+  const [productList, setProductList] = useState([]);
+  const [total, setTotal] = useState('R$ 0,00');
+
   const products = useSelector(state => state.cart.products);
+
+  const cartTotal = useMemo(
+    () =>
+      formatPrice(
+        products.reduce(
+          (total, product) => total + product.price * product.amount,
+          0
+        )
+      ),
+    [products]
+  );
+
+  const productsFormatted = useMemo(
+    () =>
+      products.map(product => ({
+        ...product,
+        subtotal: formatPrice(product.price * product.amount),
+      })),
+    [products]
+  );
+
+  useEffect(() => {
+    setTotal(cartTotal);
+    setProductList(productsFormatted);
+  }, [cartTotal, productsFormatted]);
 
   const dispatch = useDispatch();
 
@@ -37,7 +67,7 @@ export default function Cart() {
           </tr>
         </thead>
         <tbody>
-          {products.map(product => (
+          {productList.map(product => (
             <tr key={String(product.id)}>
               <td>
                 <img src={product.image} alt={product.title} />
@@ -64,7 +94,7 @@ export default function Cart() {
                 </div>
               </td>
               <td>
-                <strong>R$258,80</strong>
+                <strong>{product.subtotal}</strong>
               </td>
               <td>
                 <button
@@ -86,7 +116,7 @@ export default function Cart() {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$1920,28</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>

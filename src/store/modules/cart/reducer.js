@@ -1,8 +1,10 @@
 import produce from 'immer';
+import { formatPrice } from '../../../util/format';
 
 const INITIAL_STATE = {
   products: [],
   cartSize: 0,
+  total: formatPrice(0),
 };
 
 export default function cart(state = INITIAL_STATE, action) {
@@ -19,8 +21,6 @@ export default function cart(state = INITIAL_STATE, action) {
           action.product.amount = 1;
           draft.products.push(action.product);
         }
-
-        draft.cartSize += 1;
       });
 
     case '@cart/REMOVE':
@@ -32,11 +32,6 @@ export default function cart(state = INITIAL_STATE, action) {
         if (productIndex >= 0) {
           draft.products.splice(productIndex, 1);
         }
-
-        draft.cartSize = draft.products.reduce(
-          (prev, curr) => prev + curr.amount,
-          0
-        );
       });
 
     case '@cart/UPDATE_AMOUNT': {
@@ -51,11 +46,6 @@ export default function cart(state = INITIAL_STATE, action) {
 
         if (productIndex >= 0) {
           draft.products[productIndex].amount = Number(action.amount);
-
-          draft.cartSize = draft.products.reduce(
-            (prev, curr) => prev + curr.amount,
-            0
-          );
         }
       });
     }
